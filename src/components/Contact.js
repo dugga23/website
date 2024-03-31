@@ -1,7 +1,4 @@
-
 import React from "react";
-import { Await } from "react-router-dom";
-import axios from "axios";
 import { useState } from "react";
 export default function Contact() {
   const [firstname, setfirstname]= useState('');
@@ -24,7 +21,8 @@ const handlenumberText=(evt)=>{
 const handledescriptionText=(evt)=>{
   setdescription(evt.target.value);
 };
-const handleSubmit=()=>{
+const handleSubmit=(e)=>{
+  e.preventDefault();
 var obj={
   firstname:firstname,
   lastname:lastname,
@@ -32,13 +30,19 @@ var obj={
   number:number,
 description:description
 };
-axios
-.post('https://water4all.rankyatra.com/submit',obj)
-.then((res)=>{
-  alert('Thank you! Form Submitted Successfully');
+fetch("https://node-3q2r.onrender.com/submit", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(obj)
 })
-.catch((err)=>{
-  alert(err);
+.then(response => response.json())
+.then(data => {
+  alert(JSON.stringify(data, null, 2));
+})
+.catch(error => {
+  console.error("Error:", error);
 });
 };
   return (
